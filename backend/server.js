@@ -3,14 +3,22 @@ const mysql = require('mysql2/promise');
 const cors = require('cors');
 const multer = require('multer');
 const XLSX = require('xlsx');
-
-
+require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3100;
+
+
+
+// CORS configuration
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || 'http://82.29.164.109:3501',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+};
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Configure multer for file uploads
@@ -18,10 +26,10 @@ const upload = multer({ dest: 'uploads/' });
 
 // MySQL database connection
 const dbConfig = {
-  host: 'srv808637.hstgr.cloud',
-  user: 'admin',
-  password: 'admin@123', // Change this to your MySQL password
-  database: 'item_management'
+  host: process.env.DB_HOST || 'srv808637.hstgr.cloud',
+  user: process.env.DB_USER || 'admin',
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME || 'item_management'
 };
 
 // Create connection pool
